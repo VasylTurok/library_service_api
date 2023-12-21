@@ -2,11 +2,13 @@ from rest_framework import viewsets
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from books_service.models import Book
 from books_service.serializers import BookSerializer
+from books_service.permissions import IsAdminAndNotGetMethod
 
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    permission_classes = (IsAdminAndNotGetMethod, )
 
     def get_queryset(self):
         title = self.request.query_params.get("title")
