@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework_simplejwt",
     "drf_spectacular",
     "books_service",
     "user",
@@ -144,7 +145,10 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": False
+    "ROTATE_REFRESH_TOKENS": False,
+
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZE",
+
 }
 
 SPECTACULAR_SETTINGS = {
