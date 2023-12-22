@@ -26,7 +26,8 @@ class Borrowing(models.Model):
         if book.inventory <= 0:
             raise error_to_raise(
                 {
-                    "Book": f"Currently, there is no free book with the name '{book.title}'."
+                    "Book": "Currently, there is no free "
+                            f"book with the name '{book.title}'."
                 }
             )
 

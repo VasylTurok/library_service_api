@@ -1,4 +1,4 @@
-from django.db.models import F, Count, Case, When, Value, BooleanField
+from django.db.models import Case, When, Value, BooleanField
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import api_view
@@ -78,7 +78,5 @@ class BorrowingViewSet(
         return super().list(request, *args, **kwargs)
 
 
-
-#
 # @api_view(["POST"])
 # def return_book(request: Request) -> Response: ? що відправляти
