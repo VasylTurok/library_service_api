@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from django.conf import settings
@@ -18,6 +19,36 @@ class Borrowing(models.Model):
         on_delete=models.CASCADE,
         related_name="borrowings"
     )
+
+    @staticmethod
+    def validate_borrowing(book, error_to_raise):
+
+        if book.inventory <= 0:
+            raise error_to_raise(
+                {
+                    "Book": f"Currently, there is no free book with the name '{book.title}'."
+                }
+            )
+
+    def clean(self):
+        Borrowing.validate_borrowing(
+            self.book,
+            ValidationError,
+        )
+
+    def save(
+            self,
+            force_insert=False,
+            force_update=False,
+            using=None,
+            update_fields=None,
+    ):
+        self.full_clean()
+        self.book.inventory -= 1
+        self.book.save()
+        return super(Borrowing, self).save(
+            force_insert, force_update, using, update_fields
+        )
 
     def __str__(self):
         return f"{self.borrow_date} - {self.expected_return_date}"
