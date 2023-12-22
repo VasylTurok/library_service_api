@@ -21,7 +21,6 @@ class BorrowingViewSet(
 ):
     queryset = Borrowing.objects.select_related("user", "book").annotate(
         is_active=Case(
-
             When(actual_return_date__isnull=True, then=Value(True)),
             default=Value(False),
             output_field=BooleanField(),
@@ -30,17 +29,27 @@ class BorrowingViewSet(
     serializer_class = BorrowingSerializer
     permission_classes = (IsAuthenticated, )
 
+    @staticmethod
+    def _params_to_ints(qs):
+        """Converts a list of string IDs to a list of integers"""
+        return [int(str_id) for str_id in qs.split(",")]
+
     def get_queryset(self):
         queryset = self.queryset
         if not self.request.user.is_staff:
             queryset = queryset.filter(user_id=self.request.user.id)
 
         is_active = self.request.query_params.get("is_active")
+        user_id = self.request.query_params.get("user_id")
         if is_active:
             if is_active == "False":
                 queryset = queryset.filter(actual_return_date__isnull=False)
             else:
                 queryset = queryset.filter(actual_return_date__isnull=True)
+
+        if user_id and self.request.user.is_staff:
+            user_ids = self._params_to_ints(user_id)
+            queryset = queryset.filter(user__id__in=user_ids)
 
         return queryset
 
@@ -59,10 +68,9 @@ class BorrowingViewSet(
                             "Example: ?is_active=True"
             ),
             OpenApiParameter(
-                "arrival_time",
-                type=str,
-                description="Filter by arrival_time. "
-                            "Example: ?arrival_time=2000-12-1"
+                "user_id",
+                type={"type": "list", "items": {"type": "number"}},
+                description="Filter by user ids. Example: ?user_id=1,3"
             )
         ]
     )
