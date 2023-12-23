@@ -37,6 +37,7 @@ class Borrowing(models.Model):
             ValidationError,
         )
 
+
     def save(
             self,
             force_insert=False,
@@ -45,14 +46,12 @@ class Borrowing(models.Model):
             update_fields=None,
     ):
         self.full_clean()
-        self.book.inventory -= 1
-        self.book.save()
         return super(Borrowing, self).save(
             force_insert, force_update, using, update_fields
         )
 
     def __str__(self):
-        return f"{self.borrow_date} - {self.expected_return_date}"
+        return f"{self.book.title}"
 
     class Meta:
         ordering = ["borrow_date", ]

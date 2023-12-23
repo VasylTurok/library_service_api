@@ -1,6 +1,11 @@
+from datetime import datetime
+
+from django.contrib.auth.decorators import user_passes_test
+from django.db import transaction
 from django.db.models import Case, When, Value, BooleanField
+from django.http import Http404
 from drf_spectacular.utils import extend_schema, OpenApiParameter
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
 from rest_framework.decorators import api_view
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -33,6 +38,15 @@ class BorrowingViewSet(
     def _params_to_ints(qs):
         """Converts a list of string IDs to a list of integers"""
         return [int(str_id) for str_id in qs.split(",")]
+
+    def perform_create(self, serializer):
+        borrowing_instance = serializer.save()
+
+        book_instance = borrowing_instance.book
+        book_instance.inventory -= 1
+        book_instance.save()
+
+        return Response(serializer.data)
 
     def get_queryset(self):
         queryset = self.queryset
@@ -78,5 +92,27 @@ class BorrowingViewSet(
         return super().list(request, *args, **kwargs)
 
 
-# @api_view(["POST"])
-# def return_book(request: Request) -> Response: ? що відправляти
+def is_admin(user):
+    return user.is_staff
+
+
+@api_view(["POST"])
+@user_passes_test(is_admin)
+def return_book(request, pk) -> Response:
+    try:
+        borrowing = Borrowing.objects.get(id=request.data["pk"])
+    except Borrowing.DoesNotExist:
+        return Response(
+            "Borrowing not found",
+            status=status.HTTP_404_NOT_FOUND)
+    if borrowing.actual_return_date:
+        return Response(
+            "Failed: Actual return date is missing",
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    borrowing.book.inventory += 1
+    borrowing.actual_return_date = datetime.now().date()
+    borrowing.save()
+    borrowing.book.save()
+
+    return Response("Success", status=status.HTTP_200_OK)

@@ -13,7 +13,6 @@ class BorrowingSerializer(serializers.ModelSerializer):
             "id",
             "borrow_date",
             "expected_return_date",
-            "actual_return_date",
             "book",
             "user",
         )
@@ -25,12 +24,6 @@ class BorrowingSerializer(serializers.ModelSerializer):
             ValidationError
         )
         return data
-
-    def create(self, validated_data):
-        with transaction.atomic():
-            borrowing = Borrowing.objects.create(**validated_data)
-            validated_data["book"].inventory -= 1
-            return borrowing
 
 
 class BorrowingListSerializer(BorrowingSerializer):
