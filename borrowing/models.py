@@ -26,7 +26,8 @@ class Borrowing(models.Model):
         if book.inventory <= 0:
             raise error_to_raise(
                 {
-                    "Book": f"Currently, there is no free book with the name '{book.title}'."
+                    "Book": "Currently, there is no free "
+                            f"book with the name '{book.title}'."
                 }
             )
 
@@ -36,6 +37,7 @@ class Borrowing(models.Model):
             ValidationError,
         )
 
+
     def save(
             self,
             force_insert=False,
@@ -44,14 +46,12 @@ class Borrowing(models.Model):
             update_fields=None,
     ):
         self.full_clean()
-        self.book.inventory -= 1
-        self.book.save()
         return super(Borrowing, self).save(
             force_insert, force_update, using, update_fields
         )
 
     def __str__(self):
-        return f"{self.borrow_date} - {self.expected_return_date}"
+        return f"{self.book.title}"
 
     class Meta:
         ordering = ["borrow_date", ]
