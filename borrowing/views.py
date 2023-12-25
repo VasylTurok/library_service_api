@@ -1,13 +1,10 @@
 from datetime import datetime
 
 from django.contrib.auth.decorators import user_passes_test
-from django.db import transaction
 from django.db.models import Case, When, Value, BooleanField
-from django.http import Http404
 from drf_spectacular.utils import extend_schema, OpenApiParameter
-from rest_framework import viewsets, mixins, status
+from rest_framework import  mixins, status
 from rest_framework.decorators import api_view
-from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
