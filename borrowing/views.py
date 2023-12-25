@@ -18,6 +18,8 @@ from borrowing.serializers import (
     BorrowingListSerializer
 )
 
+from borrowing.tasks import notify_borrowing_creation
+
 
 class BorrowingViewSet(
     mixins.CreateModelMixin,
@@ -44,6 +46,7 @@ class BorrowingViewSet(
 
         book_instance = borrowing_instance.book
         book_instance.inventory -= 1
+        notify_borrowing_creation.delay(borrowing_instance.id)
         book_instance.save()
 
         return Response(serializer.data)
