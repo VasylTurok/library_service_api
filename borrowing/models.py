@@ -37,7 +37,6 @@ class Borrowing(models.Model):
             ValidationError,
         )
 
-
     def save(
             self,
             force_insert=False,
