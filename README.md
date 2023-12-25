@@ -40,3 +40,9 @@ The system will optimize the work of library administrators and will make the li
 
 ## Test
 Use `python manage.py test` to run tests.
+
+## Img
+![image](https://github.com/VasylTurok/library_service_api/assets/127683195/b54e1aab-c740-418f-8ef0-b1d60ce630c6)
+![image](https://github.com/VasylTurok/library_service_api/assets/127683195/4500aab3-0576-4b60-bd04-edd1350a40aa)
+
+
