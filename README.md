@@ -44,5 +44,7 @@ Use `python manage.py test` to run tests.
 ## Img
 ![image](https://github.com/VasylTurok/library_service_api/assets/127683195/b54e1aab-c740-418f-8ef0-b1d60ce630c6)
 ![image](https://github.com/VasylTurok/library_service_api/assets/127683195/4500aab3-0576-4b60-bd04-edd1350a40aa)
-
-
+![image](https://github.com/VasylTurok/library_service_api/assets/127683195/9d0da99a-09f6-4940-a113-2d5d50589806)
+![image](https://github.com/VasylTurok/library_service_api/assets/127683195/e8d5e5fc-f14b-4776-a089-3e15ff3b7476)
+![image](https://github.com/VasylTurok/library_service_api/assets/127683195/8b842b26-1123-4827-947b-54319c3c996b)
+![image](https://github.com/VasylTurok/library_service_api/assets/127683195/5f53c8fb-c927-4ec9-ac64-3485034eb201)
